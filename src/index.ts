@@ -1,11 +1,14 @@
 import express from 'express';
 import {v4 as uuidv4 } from 'uuid';
+import cors from 'cors'
 
 const app = express();
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8081
 
 type Task = {name: string, complete: boolean};
 let taskTable: {[id: string]: Task};
+
+app.use(cors());
 
 app.get('/tasks', (req, res, next) => {
   res.status(200).json(taskTable);
