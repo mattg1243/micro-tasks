@@ -6,25 +6,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const uuid_1 = require("uuid");
 const cors_1 = __importDefault(require("cors"));
+let taskTable = [];
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 8081;
-let taskTable;
 app.use((0, cors_1.default)());
+app.use(express_1.default.json());
 app.get('/tasks', (req, res, next) => {
     res.status(200).json(taskTable);
 });
 app.post('/new-task', (req, res, next) => {
-    const { name } = req.body;
+    const name = req.body.name;
     const taskId = (0, uuid_1.v4)();
-    const newTask = { name, complete: false };
-    taskTable[`${taskId}`] = newTask;
+    const newTask = { id: taskId, name: name, complete: false };
+    taskTable.push(newTask);
+    // if (taskTable.length > 5) {
+    //   delete taskTable[0];
+    // }
+    console.log(`task ${taskId} added`);
     res.status(200).json(taskTable);
 });
 app.post('/complete-task', (req, res, next) => {
-    const { taskId } = req.body;
-    const task = taskTable[taskId];
-    task.complete ? task.complete = false : task.complete = true;
-    res.status(200).json(taskTable);
+    // const {taskId} = req.body;
+    // const task = taskTable[taskId];
+    // task.complete ? task.complete = false : task.complete = true;
+    // res.status(200).json(taskTable);
 });
 app.post('/delete-task', (req, res, next) => {
     const { taskId } = req.body;
